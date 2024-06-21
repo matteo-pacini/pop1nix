@@ -8,16 +8,9 @@
   outputs =
     { self, nixpkgs }:
     let
-      forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.unix;
-
-      nixpkgsFor = forAllSystems (
-        system:
-        import nixpkgs {
-          inherit system;
-          config = { };
-          overlays = [ ];
-        }
-      );
+      lib = nixpkgs.lib;
+      forAllSystems = lib.genAttrs lib.platforms.unix;
+      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
     in
     {
       packages = forAllSystems (
